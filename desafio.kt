@@ -1,29 +1,39 @@
-// [Template no Kotlin Playground](https://pl.kotl.in/WcteahpyN)
-
 enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
 
-class Usuario
+data class Usuario(val nome: String)
 
-data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
+data class ConteudoEducacional(val nome: String, val duracao: Int = 60)
 
-class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
-    val inscritos = mutableListOf<Usuario>()
+class Formacao(val nome: String, val conteudos: List<ConteudoEducacional>) {
+    val inscritos: MutableList<Usuario> = mutableListOf()
 
     fun matricular(usuario: Usuario) {
         inscritos.add(usuario)
     }
 }
 
+fun Usuario.imprimirCursosMatriculados(formacao: Formacao) {
+    println("Cursos matriculados: ${formacao.conteudos.joinToString(", ") { it.nome }}")
+}
+
 fun main() {
-    val conteudo1 = ConteudoEducacional("Conteúdo 1")
-    val conteudo2 = ConteudoEducacional("Conteúdo 2")
-    val conteudos = listOf(conteudo1, conteudo2)
+    val conteudos = listOf(
+        ConteudoEducacional("Conteúdo 1"),
+        ConteudoEducacional("Conteúdo 2")
+    )
 
     val formacao = Formacao("Formação", conteudos)
 
-    val usuario1 = Usuario()
-    val usuario2 = Usuario()
+    val usuarios = listOf(
+        Usuario("João"),
+        Usuario("Maria")
+    )
 
-    formacao.matricular(usuario1)
-    formacao.matricular(usuario2)
+    usuarios.forEach { formacao.matricular(it) }
+
+    formacao.inscritos.forEach { usuario ->
+        println("Aluno: ${usuario.nome}")
+        usuario.imprimirCursosMatriculados(formacao)
+        println()
+    }
 }
